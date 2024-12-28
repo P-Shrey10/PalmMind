@@ -14,6 +14,7 @@ type DataType = {
   sn: number;
   firstName: string;
   lastName: string;
+  email: string;
 };
 
 const RegisterDetail = () => {
@@ -43,6 +44,7 @@ const RegisterDetail = () => {
         sn: index + 1,
         firstName: user.firstName,
         lastName: user.lastName,
+        email: user.email,
       }));
       setUsers(formattedData);
     } catch (error) {
@@ -93,7 +95,7 @@ const RegisterDetail = () => {
     const XlsxData = [
       headers.join(","),
       ...filteredData.map((row) =>
-        [row.sn, row.firstName, row.lastName].join(",")
+        [row.sn, row.firstName, row.lastName, row.email].join(",")
       ),
     ].join("\n");
 
@@ -247,7 +249,7 @@ const RegisterDetail = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">View Details</h2>
+              <h2 className="text-xl font-semibold">View User Details</h2>
               <button
                 onClick={() => setShowViewModal(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -265,11 +267,15 @@ const RegisterDetail = () => {
                   <span className="font-semibold">Last Name:</span>{" "}
                   {selectedRow.lastName}
                 </p>
+                <p className="text-gray-600">
+                  <span className="font-semibold">Email:</span>{" "}
+                  {selectedRow.email}
+                </p>
               </div>
             )}
             <button
               onClick={() => setShowViewModal(false)}
-              className="mt-6 w-full bg-gray-100 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200"
+              className="mt-6 w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
             >
               Close
             </button>
@@ -277,47 +283,87 @@ const RegisterDetail = () => {
         </div>
       )}
 
-      
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-semibold">Edit User</h2>
-            <input
-              type="text"
-              value={editForm.firstName}
-              onChange={(e) =>
-                setEditForm({ ...editForm, firstName: e.target.value })
-              }
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              value={editForm.lastName}
-              onChange={(e) =>
-                setEditForm({ ...editForm, lastName: e.target.value })
-              }
-              className="w-full p-2 border rounded mt-2"
-            />
-            <button
-              onClick={handleEdit}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Save Changes
-            </button>
+            <h2 className="text-xl font-semibold mb-4">Edit User Details</h2>
+            <div className="mb-4">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                First Name:
+              </label>
+              <input
+                id="firstName"
+                type="text"
+                value={editForm.firstName}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, firstName: e.target.value })
+                }
+                className="w-full p-2 border rounded mt-1"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Last Name:
+              </label>
+              <input
+                id="lastName"
+                type="text"
+                value={editForm.lastName}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, lastName: e.target.value })
+                }
+                className="w-full p-2 border rounded mt-1"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-4 mt-4">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleEdit}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       )}
+
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-semibold">Delete User</h2>
-            <p>Are you sure you want to delete this user?</p>
-            <button
-              onClick={handleDelete}
-              className="mt-4 bg-red-600 text-white px-4 py-2 rounded"
-            >
-              Delete
-            </button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full space-y-4">
+            <h2 className="text-xl font-semibold text-gray-800">Delete User</h2>
+            <p className="text-gray-600">
+              Are you sure you want to delete this user? This action cannot be
+              undone.
+            </p>
+
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 "
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       )}
